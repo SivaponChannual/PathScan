@@ -6,6 +6,7 @@ const STATUS_COLOR = {
   connecting:   '#facc15',
   disconnected: 'var(--muted)',
   error:        'var(--danger)',
+  mock:         '#60a5fa',
 };
 
 export default function NodeRedPanel() {
@@ -15,7 +16,7 @@ export default function NodeRedPanel() {
     <div className={styles.panel}>
       <div className={styles.header}>
         <span className={styles.dot} style={{ background: STATUS_COLOR[status] }} />
-        <span className={styles.title}>Node-RED Live Feed</span>
+        <span className={styles.title}>Live Telemetry Stream (ESP32 / Node-RED)</span>
         <span className={styles.statusText}>{status}</span>
         {(status === 'disconnected' || status === 'error') && (
           <button className={styles.reconnect} onClick={reconnect}>Reconnect</button>
@@ -24,7 +25,7 @@ export default function NodeRedPanel() {
 
       <div className={styles.feed}>
         {messages.length === 0 && (
-          <p className={styles.empty}>Waiting for messages on ws://localhost:1880/ws/rain …</p>
+          <p className={styles.empty}>Waiting for messages on ws://localhost:1880/ws/pathscan ...</p>
         )}
         {messages.map(m => (
           <div key={m.id} className={styles.msg}>

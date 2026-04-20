@@ -15,11 +15,11 @@ export default function StationList({ basin }) {
   }, [basin]);
 
   if (!basin)   return null;
-  if (loading)  return <p className={styles.muted}>Loading stations...</p>;
+  if (loading)  return <p className={styles.muted}>Loading sensor array...</p>;
 
   return (
     <div className={styles.wrapper}>
-      <h3 className={styles.heading}>Stations in {basin.name}</h3>
+      <h3 className={styles.heading}>Sensor Array in {basin.name}</h3>
       <div className={styles.grid}>
         {stations.map(s => (
           <div key={s.stationId} className={styles.card}>

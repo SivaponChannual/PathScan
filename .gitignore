@@ -1,3 +1,17 @@
 # macOS hidden files
 .DS_Store
 **/.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Tool/editor local files
+.claude/

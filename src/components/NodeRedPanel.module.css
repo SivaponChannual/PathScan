@@ -1,5 +1,5 @@
 .panel {
-  background: var(--surface);
+  background: linear-gradient(180deg, #ffffff, #f7faff);
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -28,15 +28,15 @@
 .statusText { font-size: 11px; color: var(--muted); margin-right: auto; }
 
 .reconnect {
-  background: none;
+  background: rgba(99, 102, 241, 0.1);
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 3px 9px;
+  border-radius: 6px;
   cursor: pointer;
 }
-.reconnect:hover { background: var(--card); }
+.reconnect:hover { background: rgba(99, 102, 241, 0.18); }
 
 .feed {
   overflow-y: auto;
@@ -52,7 +52,7 @@
   display: flex;
   gap: 10px;
   padding: 3px 0;
-  border-bottom: 1px solid rgba(42, 74, 99, 0.4);
+  border-bottom: 1px solid rgba(129, 145, 177, 0.3);
 }
 
 .time    { color: var(--muted); flex-shrink: 0; }

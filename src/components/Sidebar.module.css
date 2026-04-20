@@ -1,7 +1,7 @@
 .sidebar {
   width: 240px;
   min-width: 240px;
-  background: var(--surface);
+  background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 16px 20px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--accent);
   border-bottom: 1px solid var(--border);
@@ -41,16 +41,19 @@
   flex-direction: column;
   gap: 2px;
   border-left: 3px solid transparent;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
   color: var(--text);
+  border-radius: 0 8px 8px 0;
+  margin-right: 8px;
 }
 
 .item:hover {
-  background: var(--card);
+  background: rgba(99, 102, 241, 0.09);
+  transform: translateX(2px);
 }
 
 .active {
-  background: var(--card);
+  background: rgba(99, 102, 241, 0.15);
   border-left-color: var(--accent);
 }
 

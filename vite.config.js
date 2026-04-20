@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/pathscan-api': 'http://localhost:8000',
       '/rain-api': 'http://localhost:8000',
       '/graphql':  'http://localhost:8000',
     },

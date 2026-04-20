@@ -9,17 +9,17 @@ export default function Sidebar({ selected, onSelect }) {
   useEffect(() => {
     fetchBasins()
       .then(setBasins)
-      .catch(() => setError('Could not load basins'));
+      .catch(() => setError('Could not load scan sessions'));
   }, []);
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
-        <span className={styles.drop}>💧</span>
-        <span>Rain<b>API</b></span>
+        <span className={styles.drop}>🛰️</span>
+        <span>Path<b>Scan</b></span>
       </div>
 
-      <p className={styles.label}>BASINS</p>
+      <p className={styles.label}>SCAN SESSIONS</p>
 
       {error && <p className={styles.err}>{error}</p>}
 

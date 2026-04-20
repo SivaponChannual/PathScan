@@ -1,22 +1,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #0d1b2a;
-  --surface:   #1a2e42;
-  --card:      #1f3a52;
-  --border:    #2a4a63;
-  --accent:    #38bdf8;
-  --accent2:   #0ea5e9;
-  --text:      #e2eaf2;
-  --muted:     #7a9bbb;
-  --danger:    #f87171;
-  --success:   #4ade80;
+  --bg:        #f6f8ff;
+  --surface:   #ffffff;
+  --card:      #ffffff;
+  --border:    #dbe3f3;
+  --accent:    #6366f1;
+  --accent2:   #3b82f6;
+  --text:      #18243d;
+  --muted:     #667896;
+  --danger:    #e11d48;
+  --success:   #059669;
 }
 
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1), transparent 36%),
+    radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.08), transparent 32%),
+    var(--bg);
   color: var(--text);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: Inter, 'Segoe UI', system-ui, sans-serif;
   font-size: 14px;
   height: 100vh;
   overflow: hidden;

@@ -16,10 +16,11 @@
 }
 
 .card {
-  background: var(--card);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08), #ffffff 48%);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 12px 14px;
+  box-shadow: 0 8px 18px rgba(32, 60, 114, 0.08);
 }
 
 .sid    { font-size: 10px; color: var(--muted); }
