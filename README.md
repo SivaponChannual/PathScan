@@ -1,4 +1,4 @@
-# 🛰️ PathScan v2.0
+# 🛰️ PathScan
 > **Precision 360° LiDAR-style Sweeping Radar System**
 
 PathScan is a spatial mapping and environment rendering system. It utilizes a rotating sensor array connected to a KidBright32 (ESP32) microcontroller to scan a room and transmit distance telemetry to a centralized database. The React-based dashboard instantly renders this data into interactive 2D blueprints and 2.5D isometric reconstructions, using a pure-Python DBSCAN clustering algorithm to identify solid obstacles.
