@@ -19,7 +19,7 @@ from mysql.connector import pooling
 import os
 from datetime import datetime
 
-# ─── App setup ───────────────────────────────────────────────────────────────
+#  App setup
 app = FastAPI(
     title="PathScan API v2",
     description=(
@@ -36,7 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ─── Sensor hardware constants ───────────────────────────────────────────────
+#  Sensor hardware constants
 IR_MIN_CM  = 4.0      # GP2Y0A41SK0F minimum reliable range
 IR_MAX_CM  = 40.0     # GP2Y0A41SK0F maximum readable distance
 US_MIN_CM  = 2.0      # HC-SR04 minimum range
@@ -44,7 +44,7 @@ US_MAX_CM  = 400.0    # HC-SR04 maximum range
 SERVO_MIN  = 0        # SG90 min angle
 SERVO_MAX  = 180      # SG90 max angle
 
-# ─── DB connection ────────────────────────────────────────────────────────────
+#  DB connection
 DB_CONFIG = {
     "host":     os.getenv("DB_HOST"),
     "port":     int(os.getenv("DB_PORT", "3306")),
@@ -81,7 +81,7 @@ def db_unavailable():
     raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
-# ─── Pydantic models ──────────────────────────────────────────────────────────
+#  Pydantic models
 class ScanReadingIn(BaseModel):
     session_name: str = "Default Session"
     servo_angle_deg: int
@@ -90,7 +90,7 @@ class ScanReadingIn(BaseModel):
     ultrasonic_cm: Optional[float] = None
 
 
-# ─── Math helpers ─────────────────────────────────────────────────────────────
+#  Math helpers
 def clamp_ir(value: float) -> Optional[float]:
     """Clamp a distance to the GP2Y0A41SK0F reliable range."""
     if value is None:
@@ -233,7 +233,7 @@ def build_360_points(rows: list) -> list:
     return points
 
 
-# ─── Routes ──────────────────────────────────────────────────────────────────
+#  Routes
 
 @app.get("/pathscan-api/v1/sessions")
 def get_sessions():
@@ -396,7 +396,7 @@ def post_reading(reading: ScanReadingIn):
     }
 
 
-# ─── Mock data generator endpoint (for simulation/demo) ──────────────────────
+#  Mock data generator endpoint (for simulation/demo)
 @app.get("/pathscan-api/v1/mock/generate-room")
 def generate_mock_room(
     half_w: float = Query(default=20.0, description="Half-width of room in cm"),
@@ -475,7 +475,7 @@ def generate_mock_room(
     return {"total_points": len(points), "points": points}
 
 
-# ─── Root & docs ──────────────────────────────────────────────────────────────
+#  Root & docs
 @app.get("/")
 def root():
     return {
@@ -488,7 +488,7 @@ def root():
     }
 
 
-# ─── Run ─────────────────────────────────────────────────────────────────────
+# Run
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

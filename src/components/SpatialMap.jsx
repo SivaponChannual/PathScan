@@ -8,7 +8,7 @@ const CENTER_Y = CANVAS_H / 2;
 const MAX_RANGE = 40; // GP2Y0A41SK0F max cm
 const SCALE = (Math.min(CANVAS_W, CANVAS_H) / 2 - 40) / MAX_RANGE;
 
-/* ── Polar → Canvas 2D ─────────────────────────────────────────────────── */
+/* Polar → Canvas 2D  */
 function toCanvas(distCm, angleDeg) {
   // 0° = right, 90° = up (screen y-inverted)
   const rad = angleDeg * (Math.PI / 180);
@@ -18,7 +18,7 @@ function toCanvas(distCm, angleDeg) {
   };
 }
 
-/* ── Draw background grid ──────────────────────────────────────────────── */
+/* Draw background grid  */
 function drawGrid(ctx, mode) {
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
@@ -87,7 +87,7 @@ function drawGrid(ctx, mode) {
   ctx.stroke();
 }
 
-/* ── Draw points — 2D mode ─────────────────────────────────────────────── */
+/* Draw points — 2D mode  */
 function drawPoints2D(ctx, points) {
   // Draw scan rays first (behind points)
   points.forEach(p => {
@@ -151,7 +151,7 @@ function drawPoints2D(ctx, points) {
   });
 }
 
-/* ── Draw points — 2.5D mode (extruded pillars) ───────────────────────── */
+/* Draw points — 2.5D mode (extruded pillars)  */
 function drawPoints25D(ctx, points) {
   // Sort by Y so farther points draw first (painter's algorithm)
   const sorted = [...points].sort((a, b) => {
@@ -212,7 +212,7 @@ function drawPoints25D(ctx, points) {
   });
 }
 
-/* ── Draw HUD overlay info ─────────────────────────────────────────────── */
+/* Draw HUD overlay info  */
 function drawHUD(ctx, mode, pointCount, clusterCount) {
   ctx.fillStyle = 'rgba(99,102,241,0.6)';
   ctx.font = '10px monospace';
@@ -247,7 +247,7 @@ function drawHUD(ctx, mode, pointCount, clusterCount) {
   }
 }
 
-/* ── Main Component ────────────────────────────────────────────────────── */
+/* Main Component  */
 export default function SpatialMap({ viewMode, session, polling }) {
   const canvasRef = useRef(null);
   const { scanData } = polling ?? {};

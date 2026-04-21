@@ -22,7 +22,7 @@ export default function App() {
       <div className={styles.body}>
         <main className={styles.main}>
 
-          {/* ── Top bar ── */}
+          {/* Top bar */}
           <header className={styles.topbar}>
             <div>
               <h1 className={styles.title}>PathScan Radar Console</h1>
@@ -50,23 +50,23 @@ export default function App() {
             </div>
           </header>
 
-          {/* ── Live stats ── */}
+          {/* Live stats */}
           <StatsRow sessionName={sessionName} polling={polling} />
 
-          {/* ── Spatial map canvas (2D / 2.5D toggle) ── */}
+          {/* Spatial map canvas (2D / 2.5D toggle) */}
           <SpatialMap
             viewMode={viewMode}
             session={selectedSession}
             polling={polling}
           />
 
-          {/* ── Front vs Rear vs Ultrasonic line chart ── */}
+          {/* Front vs Rear vs Ultrasonic line chart */}
           <SensorChart sessionName={sessionName} />
 
-          {/* ── Distance by angle bar chart ── */}
+          {/* Distance by angle bar chart */}
           <DistanceChart sessionName={sessionName} />
 
-          {/* ── Sensor array info cards ── */}
+          {/* Sensor array info cards */}
           <StationList sessionName={sessionName} />
 
         </main>

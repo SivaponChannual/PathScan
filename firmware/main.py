@@ -14,7 +14,7 @@ Hardware wiring:
 from machine import Pin, PWM, ADC
 import time
 
-# ─── Pin setup ────────────────────────────────────────────────────────────────
+# Pin setup
 servo_pin = PWM(Pin(15), freq=50)
 
 adc_front = ADC(Pin(32))
@@ -26,7 +26,7 @@ adc_rear.atten(ADC.ATTN_11DB)
 trig_pin = Pin(25, Pin.OUT)
 echo_pin = Pin(26, Pin.IN)
 
-# ─── Constants ────────────────────────────────────────────────────────────────
+# Constants 
 STEP_DEG      = 5       # Angle increment per sweep step
 SETTLE_MS     = 30      # Delay for servo + sensor settle
 IR_SAMPLES    = 5       # ADC oversampling for noise reduction
@@ -34,7 +34,7 @@ IR_MIN_CM     = 4.0     # GP2Y0A41SK0F minimum reliable range
 IR_MAX_CM     = 40.0    # GP2Y0A41SK0F maximum reliable range
 US_TIMEOUT_US = 25000   # HC-SR04 echo timeout (~400 cm)
 
-# ─── Servo helper ─────────────────────────────────────────────────────────────
+# Servo helper
 def set_servo_angle(angle):
     """
     Set SG90 to a specific angle (0-180°).
@@ -45,7 +45,7 @@ def set_servo_angle(angle):
     duty = int(40 + (angle / 180) * 75)
     servo_pin.duty(duty)
 
-# ─── IR distance helper ───────────────────────────────────────────────────────
+# IR distance helper
 def read_ir_cm(adc):
     """
     Read GP2Y0A41SK0F analog output and convert to distance (cm).
@@ -77,7 +77,7 @@ def read_ir_cm(adc):
 
     return round(dist, 1)
 
-# ─── Ultrasonic distance helper ───────────────────────────────────────────────
+# Ultrasonic distance helper
 def read_ultrasonic_cm():
     """
     Read HC-SR04: send 10µs trigger pulse, measure echo duration.
@@ -114,7 +114,7 @@ def read_ultrasonic_cm():
 
     return round(dist, 1)
 
-# ─── Main sweep loop ─────────────────────────────────────────────────────────
+# Main sweep loop
 def sweep():
     """
     Perform one full 0°→180° sweep.
@@ -136,7 +136,7 @@ def sweep():
 
     print("--- SWEEP END ---")
 
-# ─── Entry point ──────────────────────────────────────────────────────────────
+# Entry point
 print("PathScan v2.0 — Firmware Ready")
 print("Sensors: 2x GP2Y0A41SK0F + HC-SR04 on SG90")
 print("Sweep step: {}°, Settle: {}ms".format(STEP_DEG, SETTLE_MS))
