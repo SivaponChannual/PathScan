@@ -2,56 +2,57 @@ const BASE = '/pathscan-api/v1';
 const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== 'false';
 
 const mockSessions = [
-  { basinId: 1, name: 'Lab Corridor A', region: 'Building 7, Floor 2' },
-  { basinId: 2, name: 'Glass Hallway', region: 'Engineering Block B' },
-  { basinId: 3, name: 'Warehouse Lane', region: 'Storage Zone C' },
+  { basinId: 1, name: 'Lab Corridor A',  region: 'Building 7, Floor 2'   },
+  { basinId: 2, name: 'Glass Hallway',   region: 'Engineering Block B'   },
+  { basinId: 3, name: 'Warehouse Lane',  region: 'Storage Zone C'        },
 ];
 
 const mockSensorsBySession = {
   1: [
-    { stationId: 101, name: 'Front Short IR', latitude: 13.756, longitude: 100.501 },
-    { stationId: 102, name: 'Rear Short IR', latitude: 13.756, longitude: 100.503 },
-    { stationId: 103, name: 'Long Range IR', latitude: 13.757, longitude: 100.501 },
-    { stationId: 104, name: 'Ultrasonic HC-SR04', latitude: 13.757, longitude: 100.504 },
+    { stationId: 101, name: 'Front Short IR (GP2Y0A41)',  type: 'IR_SHORT',   rangeNote: '4–30 cm'   },
+    { stationId: 102, name: 'Rear Short IR (GP2Y0A41)',   type: 'IR_SHORT',   rangeNote: '4–30 cm'   },
+    { stationId: 103, name: 'Long Range IR (GP2Y0A02)',   type: 'IR_LONG',    rangeNote: '20–150 cm' },
+    { stationId: 104, name: 'Ultrasonic HC-SR04',         type: 'ULTRASONIC', rangeNote: '2–400 cm'  },
   ],
   2: [
-    { stationId: 201, name: 'Front Short IR', latitude: 13.758, longitude: 100.505 },
-    { stationId: 202, name: 'Rear Short IR', latitude: 13.758, longitude: 100.507 },
-    { stationId: 203, name: 'Long Range IR', latitude: 13.759, longitude: 100.506 },
-    { stationId: 204, name: 'Ultrasonic HC-SR04', latitude: 13.759, longitude: 100.508 },
+    { stationId: 201, name: 'Front Short IR (GP2Y0A41)',  type: 'IR_SHORT',   rangeNote: '4–30 cm'   },
+    { stationId: 202, name: 'Rear Short IR (GP2Y0A41)',   type: 'IR_SHORT',   rangeNote: '4–30 cm'   },
+    { stationId: 203, name: 'Long Range IR (GP2Y0A02)',   type: 'IR_LONG',    rangeNote: '20–150 cm' },
+    { stationId: 204, name: 'Ultrasonic HC-SR04',         type: 'ULTRASONIC', rangeNote: '2–400 cm'  },
   ],
   3: [
-    { stationId: 301, name: 'Front Short IR', latitude: 13.760, longitude: 100.510 },
-    { stationId: 302, name: 'Rear Short IR', latitude: 13.760, longitude: 100.512 },
-    { stationId: 303, name: 'Long Range IR', latitude: 13.761, longitude: 100.511 },
-    { stationId: 304, name: 'Ultrasonic HC-SR04', latitude: 13.761, longitude: 100.513 },
+    { stationId: 301, name: 'Front Short IR (GP2Y0A41)',  type: 'IR_SHORT',   rangeNote: '4–30 cm'   },
+    { stationId: 302, name: 'Rear Short IR (GP2Y0A41)',   type: 'IR_SHORT',   rangeNote: '4–30 cm'   },
+    { stationId: 303, name: 'Long Range IR (GP2Y0A02)',   type: 'IR_LONG',    rangeNote: '20–150 cm' },
+    { stationId: 304, name: 'Ultrasonic HC-SR04',         type: 'ULTRASONIC', rangeNote: '2–400 cm'  },
   ],
 };
 
-const mockTransparencySeriesBySession = {
+// Renamed: year → angle, rainfall → transparencyIndex
+const mockTransparencyBySession = {
   1: [
-    { year: 0, rainfall: 0.15 },
-    { year: 15, rainfall: 0.31 },
-    { year: 30, rainfall: 0.22 },
-    { year: 45, rainfall: 0.74 },
-    { year: 60, rainfall: 0.8 },
-    { year: 75, rainfall: 0.42 },
+    { angle: 0,   transparencyIndex: 0.15, materialType: 'PLYWOOD' },
+    { angle: 15,  transparencyIndex: 0.31, materialType: 'METAL'   },
+    { angle: 30,  transparencyIndex: 0.22, materialType: 'PLYWOOD' },
+    { angle: 45,  transparencyIndex: 0.74, materialType: 'GLASS'   },
+    { angle: 60,  transparencyIndex: 0.80, materialType: 'GLASS'   },
+    { angle: 75,  transparencyIndex: 0.42, materialType: 'ACRYLIC' },
   ],
   2: [
-    { year: 0, rainfall: 0.11 },
-    { year: 15, rainfall: 0.18 },
-    { year: 30, rainfall: 0.54 },
-    { year: 45, rainfall: 0.89 },
-    { year: 60, rainfall: 0.76 },
-    { year: 75, rainfall: 0.6 },
+    { angle: 0,   transparencyIndex: 0.11, materialType: 'PLYWOOD' },
+    { angle: 15,  transparencyIndex: 0.18, materialType: 'PLYWOOD' },
+    { angle: 30,  transparencyIndex: 0.54, materialType: 'ACRYLIC' },
+    { angle: 45,  transparencyIndex: 0.89, materialType: 'GLASS'   },
+    { angle: 60,  transparencyIndex: 0.76, materialType: 'GLASS'   },
+    { angle: 75,  transparencyIndex: 0.60, materialType: 'GLASS'   },
   ],
   3: [
-    { year: 0, rainfall: 0.05 },
-    { year: 15, rainfall: 0.09 },
-    { year: 30, rainfall: 0.13 },
-    { year: 45, rainfall: 0.2 },
-    { year: 60, rainfall: 0.28 },
-    { year: 75, rainfall: 0.35 },
+    { angle: 0,   transparencyIndex: 0.05, materialType: 'PLYWOOD' },
+    { angle: 15,  transparencyIndex: 0.09, materialType: 'PLYWOOD' },
+    { angle: 30,  transparencyIndex: 0.13, materialType: 'PLYWOOD' },
+    { angle: 45,  transparencyIndex: 0.20, materialType: 'METAL'   },
+    { angle: 60,  transparencyIndex: 0.28, materialType: 'METAL'   },
+    { angle: 75,  transparencyIndex: 0.35, materialType: 'METAL'   },
   ],
 };
 
@@ -66,25 +67,33 @@ function withFallback(requestFn, fallbackData) {
 }
 
 export const fetchBasins = () =>
-  USE_MOCK ? withFallback(() => get('/sessions'), mockSessions) : get('/sessions');
+  USE_MOCK
+    ? withFallback(() => get('/sessions'), mockSessions)
+    : get('/sessions');
 
 export const fetchBasin = (id) =>
-  USE_MOCK ? withFallback(() => get(`/sessions/${id}`), mockSessions.find((s) => s.basinId === id)) : get(`/sessions/${id}`);
+  USE_MOCK
+    ? withFallback(() => get(`/sessions/${id}`), mockSessions.find(s => s.basinId === id))
+    : get(`/sessions/${id}`);
 
 export const fetchStations = (sessionId) =>
   USE_MOCK
     ? withFallback(() => get(`/sessions/${sessionId}/sensors`), mockSensorsBySession[sessionId] ?? [])
     : get(`/sessions/${sessionId}/sensors`);
 
+// Returns array of { angle, transparencyIndex, materialType }
 export const fetchAllRainfalls = (sessionId) =>
   USE_MOCK
-    ? withFallback(() => get(`/sessions/${sessionId}/transparency-index`), mockTransparencySeriesBySession[sessionId] ?? [])
+    ? withFallback(
+        () => get(`/sessions/${sessionId}/transparency-index`),
+        mockTransparencyBySession[sessionId] ?? []
+      )
     : get(`/sessions/${sessionId}/transparency-index`);
 
 export const fetchRainfallByYear = (sessionId, segmentAngle) =>
   USE_MOCK
     ? withFallback(
         () => get(`/sessions/${sessionId}/transparency-index/${segmentAngle}`),
-        (mockTransparencySeriesBySession[sessionId] ?? []).find((r) => r.year === segmentAngle) ?? null
+        (mockTransparencyBySession[sessionId] ?? []).find(r => r.angle === segmentAngle) ?? null
       )
     : get(`/sessions/${sessionId}/transparency-index/${segmentAngle}`);
