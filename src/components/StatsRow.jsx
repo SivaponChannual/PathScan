@@ -1,19 +1,24 @@
-import { useMemo } from 'react';
 import styles from './StatsRow.module.css';
 
-export default function StatsRow({ sessionId, transparencyData, polling }) {
-  const { latest = {}, status = 'idle' } = polling ?? {};
+export default function StatsRow({ sessionName, polling }) {
+  const { scanData, status = 'idle' } = polling ?? {};
+  const points = scanData?.points ?? [];
 
-  const maxTi = transparencyData?.length
-    ? Math.max(...transparencyData.map(d => d.transparencyIndex ?? 0)).toFixed(2)
+  // Compute stats from the point cloud
+  const frontPoints   = points.filter(p => p.sensor === 'front');
+  const rearPoints    = points.filter(p => p.sensor === 'rear');
+  const obstacleCount = points.filter(p => p.is_obstacle).length;
+  const clusterCount  = scanData?.clusters_found ?? 0;
+
+  const avgFront = frontPoints.length
+    ? (frontPoints.reduce((s, p) => s + p.dist_cm, 0) / frontPoints.length).toFixed(1)
     : '—';
-
-  const material = latest.transparencyIndex != null
-    ? latest.transparencyIndex > 0.7 ? { label: 'GLASS',   color: '#3b82f6', bg: '#eff6ff' }
-    : latest.transparencyIndex > 0.4 ? { label: 'ACRYLIC', color: '#8b5cf6', bg: '#f5f3ff' }
-    : latest.transparencyIndex > 0.2 ? { label: 'METAL',   color: '#f59e0b', bg: '#fffbeb' }
-    :                                   { label: 'PLYWOOD', color: '#059669', bg: '#ecfdf5' }
-    : null;
+  const avgRear = rearPoints.length
+    ? (rearPoints.reduce((s, p) => s + p.dist_cm, 0) / rearPoints.length).toFixed(1)
+    : '—';
+  const maxDelta = frontPoints.length
+    ? Math.max(...frontPoints.filter(p => p.ir_us_delta != null).map(p => p.ir_us_delta), 0).toFixed(1)
+    : '—';
 
   const statusColor = status === 'polling' ? 'var(--success)'
     : status === 'error' ? 'var(--danger)' : 'var(--muted)';
@@ -21,40 +26,39 @@ export default function StatsRow({ sessionId, transparencyData, polling }) {
   const cards = [
     {
       icon: '📡',
-      label: 'Transparency Index',
-      value: latest.transparencyIndex != null ? latest.transparencyIndex.toFixed(2) : '—',
-      accent: latest.transparencyIndex > 0.5 ? 'var(--danger)' : 'var(--success)',
-    },
-    {
-      icon: '🔍',
-      label: 'Glass Detected',
-      value: latest.isGlass ? '⚠ YES' : latest.isGlass === false ? 'NO' : '—',
-      accent: latest.isGlass ? 'var(--danger)' : 'var(--success)',
-    },
-    {
-      icon: '📏',
-      label: 'Primary Distance',
-      value: latest.primaryDistCm != null ? `${latest.primaryDistCm} cm` : '—',
+      label: 'Total Points',
+      value: points.length || '—',
       accent: 'var(--accent)',
     },
     {
+      icon: '🔴',
+      label: 'Avg Front IR',
+      value: avgFront !== '—' ? `${avgFront} cm` : '—',
+      accent: '#6366f1',
+    },
+    {
+      icon: '🟢',
+      label: 'Avg Rear IR',
+      value: avgRear !== '—' ? `${avgRear} cm` : '—',
+      accent: '#10b981',
+    },
+    {
       icon: '🔊',
-      label: 'Ultrasonic Distance',
-      value: latest.ultrasonicCm != null ? `${latest.ultrasonicCm} cm` : '—',
-      accent: 'var(--accent2)',
+      label: 'Max IR-US Δ',
+      value: maxDelta !== '—' ? `${maxDelta} cm` : '—',
+      accent: Number(maxDelta) > 20 ? 'var(--danger)' : 'var(--accent2)',
     },
     {
-      icon: '📐',
-      label: 'Max TI (Session)',
-      value: maxTi,
+      icon: '⚠️',
+      label: 'Obstacles Found',
+      value: obstacleCount || '0',
+      accent: obstacleCount > 0 ? 'var(--danger)' : 'var(--success)',
+    },
+    {
+      icon: '🗂️',
+      label: 'DBSCAN Clusters',
+      value: clusterCount,
       accent: 'var(--text)',
-    },
-    {
-      icon: '🧱',
-      label: 'Material Detected',
-      value: material?.label ?? '—',
-      accent: material?.color ?? 'var(--muted)',
-      bg: material?.bg,
     },
   ];
 
@@ -63,14 +67,14 @@ export default function StatsRow({ sessionId, transparencyData, polling }) {
       <div className={styles.statusBar}>
         <span className={styles.statusDot} style={{ background: statusColor }} />
         <span className={styles.statusText}>
-          {status === 'polling' ? 'Live · polling database every 3s'
-          : status === 'error'  ? 'Database unreachable'
+          {status === 'polling' ? 'Live · polling database every 4s'
+          : status === 'error'  ? 'Database unreachable — using mock data'
           :                       'Waiting for session...'}
         </span>
       </div>
       <div className={styles.row}>
         {cards.map((c, i) => (
-          <div key={i} className={styles.card} style={c.bg ? { background: c.bg } : {}}>
+          <div key={i} className={styles.card}>
             <span className={styles.icon}>{c.icon}</span>
             <span className={styles.label}>{c.label}</span>
             <span className={styles.value} style={{ color: c.accent }}>{c.value}</span>

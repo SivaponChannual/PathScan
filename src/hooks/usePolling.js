@@ -1,57 +1,41 @@
+/**
+ * usePolling — polls the scan endpoint for live 360° point cloud data
+ */
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { fetchScan } from '../api';
 
-const POLL_INTERVAL_MS = 3000;
-const MAX_READINGS     = 50;
-const USE_MOCK         = false;
-const BASE             = '/pathscan-api/v1';
+const POLL_INTERVAL_MS = 4000;
 
-export function usePolling(sessionId) {
-  const [readings, setReadings] = useState([]);
+export function usePolling(sessionName) {
+  const [scanData, setScanData] = useState(null);
   const [status,   setStatus]   = useState('idle');
   const timerRef   = useRef(null);
-  const lastTsRef  = useRef(null);
 
   const fetchLatest = useCallback(async () => {
-    if (!sessionId) return;
-
+    if (!sessionName) return;
     try {
-      const res  = await fetch(`${BASE}/sessions/${sessionId}/readings/latest`);
-      if (!res.ok) throw new Error(res.statusText);
-      const data = await res.json();
-
-      // Only add if timestamp is new
-      if (data.timestamp === lastTsRef.current) return;
-      lastTsRef.current = data.timestamp;
-
-      setReadings(prev => [
-        { id: Date.now(), time: new Date().toLocaleTimeString(), data },
-        ...prev.slice(0, MAX_READINGS - 1),
-      ]);
+      const data = await fetchScan(sessionName);
+      setScanData(data);
       setStatus('polling');
     } catch {
       setStatus('error');
     }
-  }, [sessionId]);
+  }, [sessionName]);
 
   useEffect(() => {
-    if (!sessionId) {
-      setReadings([]);
+    if (!sessionName) {
+      setScanData(null);
       setStatus('idle');
-      lastTsRef.current = null;
       return;
     }
 
-    // Reset when session changes
-    setReadings([]);
-    lastTsRef.current = null;
+    setScanData(null);
     setStatus('polling');
-
     fetchLatest();
     timerRef.current = setInterval(fetchLatest, POLL_INTERVAL_MS);
 
     return () => clearInterval(timerRef.current);
-  }, [sessionId, fetchLatest]);
+  }, [sessionName, fetchLatest]);
 
-  const latest = readings[0]?.data ?? {};
-  return { readings, latest, status };
+  return { scanData, status };
 }

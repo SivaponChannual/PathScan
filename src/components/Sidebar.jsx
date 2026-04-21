@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { fetchBasins } from '../api';
+import { fetchSessions } from '../api';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar({ selected, onSelect }) {
-  const [basins, setBasins] = useState([]);
-  const [error,  setError]  = useState(null);
+  const [sessions, setSessions] = useState([]);
+  const [error,    setError]    = useState(null);
 
   useEffect(() => {
-    fetchBasins()
-      .then(setBasins)
+    fetchSessions()
+      .then(setSessions)
       .catch(() => setError('Could not load scan sessions'));
   }, []);
 
@@ -24,15 +24,14 @@ export default function Sidebar({ selected, onSelect }) {
       {error && <p className={styles.err}>{error}</p>}
 
       <nav>
-        {basins.map(b => (
+        {sessions.map((s, i) => (
           <button
-            key={b.basinId}
-            className={`${styles.item} ${selected?.basinId === b.basinId ? styles.active : ''}`}
-            onClick={() => onSelect(b)}
+            key={s.name ?? i}
+            className={`${styles.item} ${selected?.name === s.name ? styles.active : ''}`}
+            onClick={() => onSelect(s)}
           >
-            <span className={styles.id}>#{b.basinId}</span>
-            <span className={styles.name}>{b.name}</span>
-            {b.region && <span className={styles.region}>{b.region}</span>}
+            <span className={styles.name}>{s.name}</span>
+            <span className={styles.region}>{s.pointCount} readings</span>
           </button>
         ))}
       </nav>
